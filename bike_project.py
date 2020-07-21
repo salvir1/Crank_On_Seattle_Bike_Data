@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
     
 # class TripDataPrep(self, ):
 
@@ -17,12 +18,13 @@ def read_bike_trips(path, location_name, num_shops, app_token, limit=50000, offs
     --------
     pandas dataframe
     '''
-    df = pd.read_json( f'{path}?$limit={limit}&$offset={offset}&$$app_token={app_token}')
-    
+    df_a = pd.read_json( f'{path}?$limit={limit}&$offset={0}&$$app_token={app_token}')
+    df_b = pd.read_json( f'{path}?$limit={limit}&$offset={offset}&$$app_token={app_token}')
+    df = df_a.append(df_b)    
     # rename trip_count column to location_name
-    df[location_name] = df.iloc[:,1]   
+    df[location_name] = df.iloc[:, -2:].sum(axis=1)   
     
-    # calculate date, month, year, dow, commuter (boolean)
+    # calculate date, month, year, dow, commuter (boolean), trip count am peak, trip count other times
     df['short_date'] = pd.DatetimeIndex(df['date']).date
     df['month'] = pd.DatetimeIndex(df['date']).month
     df['year'] = pd.DatetimeIndex(df['date']).year
@@ -36,9 +38,12 @@ def read_bike_trips(path, location_name, num_shops, app_token, limit=50000, offs
     df_by_date = df.groupby(['short_date', 'month', 'year', 'dow']).agg(
                                         {f'{location_name}_am_peak':'sum',
                                          f'{location_name}_other':'sum'
-                                          })
+                                          }).reset_index()
+    
+    # commuters travel 2 ways--remove assumed pm commuter trips from trip count other
+    df[f'{location_name}_other'] = df[f'{location_name}_other'] - df[f'{location_name}_am_peak']
     
     # add in count of nearby bike shops
     df_by_date[f'{location_name}_bike_shops'] = num_shops
-
-
+    df_by_date.to_json(f'data/{location_name}.json')
+    print(df_by_date.head())
