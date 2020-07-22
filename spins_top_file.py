@@ -32,4 +32,4 @@ with open('data/app_token.txt', 'r') as t_file:
     app_token = t_file.read() 
 
 for k, v in urls.items():
-    read_bike_trips(v, k, bike_shops[k], app_token, limit, offset)
+    r_w_bike_trips(v, k, bike_shops[k], app_token, limit, offset)

@@ -3,9 +3,11 @@ import numpy as np
     
 # class TripDataPrep(self, ):
 
-def read_bike_trips(path, location_name, num_shops, app_token, limit=50000, offset=50000):
+def r_w_bike_trips(path, location_name, num_shops, app_token, limit=50000, offset=50000):
     '''
-    Reads an API accessible dataset given url path and other url call variables
+    Reads an API accessible dataset given url path and other url call variables.
+    Writes out to a json file
+
     Parameters:
     -----------
     path (str): url path beginning with https:
@@ -14,9 +16,9 @@ def read_bike_trips(path, location_name, num_shops, app_token, limit=50000, offs
     limit (int): max rows to request
     offset (int): starting point for gathering rows
 
-    Returns:
+    Output:
     --------
-    pandas dataframe
+    json-formatted file named 'location_name.json'
     '''
     df_a = pd.read_json( f'{path}?$limit={limit}&$offset={0}&$$app_token={app_token}')
     df_b = pd.read_json( f'{path}?$limit={limit}&$offset={offset}&$$app_token={app_token}')
@@ -30,7 +32,7 @@ def read_bike_trips(path, location_name, num_shops, app_token, limit=50000, offs
     df['year'] = pd.DatetimeIndex(df['date']).year
     df['dow'] = pd.DatetimeIndex(df['date']).dayofweek
     df['hour'] = pd.DatetimeIndex(df['date']).hour
-    df['am_commuter'] = df['dow'].isin([7,1,2,3,4]) & (df['hour'].isin([5,6,7,8,9]))
+    df['am_commuter'] = df['dow'].isin([0,1,2,3,4]) & (df['hour'].isin([5,6,7,8,9]))
     df[f'{location_name}_am_peak'] = np.where(df['am_commuter']==True, df[location_name], 0)
     df[f'{location_name}_other'] = np.where(df['am_commuter']==False, df[location_name], 0)
     
@@ -45,5 +47,8 @@ def read_bike_trips(path, location_name, num_shops, app_token, limit=50000, offs
     
     # add in count of nearby bike shops
     df_by_date[f'{location_name}_bike_shops'] = num_shops
-    df_by_date.to_json(f'data/{location_name}.json')
+    df_by_date.to_json(f'data/{location_name}.json', date_format='iso')
+    
+    #test output to be sure the read operation went ok
     print(df_by_date.head())
+    
