@@ -8,6 +8,8 @@ Data cleaning
 - Merged all trip datasets by date into one master
 - Added daily weather info
 - Created total am peak trips and other trips, am peak trips for counter locations with 3 or less bike shops nearby and other trips for counter locations with more than 3
+- During EDA, it was discovered that data from several of the counter locations during 2014 was unreliable. Counts were 2-3x expectations. All data from this year was dropped.
+- During EDA, it was discovered that data from the NE Seattle counter location was missing for 3 months in the summer. Counts were much higher than expected in the month prior suggesting that this month's totals may have actually included some of the missing data, but clearly not all of it. Data for these four months in 2018 was overwritten with counts from 2019 in order for longitudinal statistics to be performed.
 
 EDA
 - Constructed several views of 
