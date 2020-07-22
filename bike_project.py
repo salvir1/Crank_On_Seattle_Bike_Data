@@ -51,4 +51,79 @@ def r_w_bike_trips(path, location_name, num_shops, app_token, limit=50000, offse
     
     #test output to be sure the read operation went ok
     print(df_by_date.head())
+
+
+def merge_counter_locations(location_dict):
+    '''
+    Loops through a dict of counter locations, creating a json file path for each 
+    location and merging counter files by date to create a master bike trip
+    count file with 'am_peak' and 'other' bike trips for each location for each day.
+
+    Parameters:
+    ----------
+    location_dict (dict): dict with root names of json files
+
+    Returns:
+    -------
+    df (dataframe): master bike trip count file
+    '''
+    count = 1
+    for k,v in urls.items():
+        if count == 1:
+            df = pd.read_json(f'data/{k}.json')
+        else:
+            df_next = pd.read_json(f'data/{k}.json')
+            df = df.merge(df_next, how="left", left_on=["short_date", "month", "year", "dow"], right_on=['short_date', "month", "year", "dow"])
+        count += 1
+    df['date'] = pd.DatetimeIndex(df['short_date']).date
+
+
+def add_weather(df, weather_file, keep_cols):
+    '''
+    Reads in daily weather data from a NOAA-generated source and merges it
+    into a dataframe by date
+    Parameters:
+    ----------
+    df (dataframe): destination dataframe
+    weather_file (.csv): source weather .csv file
+    keep_cols (list): list of weather attributes to keep
+
+    Returns:
+    -------
+    Updated dataframe
+    '''
+    df_seattle_weather = pd.read_csv(weather_csv, usecols=keep_cols)
+    df_seattle_weather['date'] = pd.DatetimeIndex(df_seattle_weather["DATE"]).date
+    df = df.merge(df_seattle_weather, how="left", left_on="date", right_on='date')
+    df.index = df['date']
+    return df
     
+def add_daily_summary_data(df, bike_shops_d):
+    '''
+    Adds daily summary statistics for trip counts
+    Parameters:
+    ----------
+    df (dataframe): pandas table of bike counts by station
+    bike_shops_d (dict): dict with number of bike shops in vicinity of bike trip counter location
+    
+    Returns:
+    -------
+    df (dataframe): df with summary statistics added
+    '''
+    few_am_peak, many_am_peak, few_other, many_other = [], [], [], []
+
+    for k,v in bike_shops.items():
+        if v <= 3:
+            few_am_peak.append('{}_am_peak'.format(k))
+            few_other.append(f'{k}_other')
+        else:
+            many_am_peak.append(f'{k}_am_peak')
+            many_other.append(f'{k}_other')
+
+    df['few_am_peak_ttl'] = df[few_am_peak].sum(axis=1)
+    df['many_am_peak_ttl'] = df[many_am_peak].sum(axis=1)
+    df['few_other_ttl'] = df[few_other].sum(axis=1)
+    df['many_other_ttl'] = df[many_other].sum(axis=1)
+    df['am_peak_ttl'] = df['few_am_peak_ttl'] + df['many_am_peak_ttl']
+    df['other_ttl'] = df['few_other_ttl'] + df['many_other_ttl']
+    return df
