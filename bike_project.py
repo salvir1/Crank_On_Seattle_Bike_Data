@@ -24,7 +24,8 @@ def r_w_bike_trips(path, location_name, num_shops, app_token, limit=50000, offse
     df_b = pd.read_json( f'{path}?$limit={limit}&$offset={offset}&$$app_token={app_token}')
     df = df_a.append(df_b)    
     # rename trip_count column to location_name
-    df[location_name] = df.iloc[:, -2:].sum(axis=1)   
+    df[location_name] = df.iloc[:, -2:].sum(axis=1)
+    df[location_name].fillna(0, inplace=True) 
     
     # calculate date, month, year, dow, commuter (boolean), trip count am peak, trip count other times
     df['short_date'] = pd.DatetimeIndex(df['date']).date
@@ -76,6 +77,7 @@ def merge_counter_locations(location_dict):
             df = df.merge(df_next, how="left", left_on=["short_date", "month", "year", "dow"], right_on=['short_date', "month", "year", "dow"])
         count += 1
     df['date'] = pd.DatetimeIndex(df['short_date']).date
+    return df
 
 
 def add_weather(df, weather_file, keep_cols):
@@ -97,6 +99,7 @@ def add_weather(df, weather_file, keep_cols):
     df = df.merge(df_seattle_weather, how="left", left_on="date", right_on='date')
     df.index = df['date']
     return df
+    
     
 def add_daily_summary_data(df, bike_shops_d):
     '''
