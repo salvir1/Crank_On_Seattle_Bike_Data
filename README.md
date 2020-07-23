@@ -31,10 +31,10 @@ The bike count--while daily--is by no means a comprehensive count of bike trips.
 > - Bike trip counts did not reveal an increase in overall bike trip counts from 2015-2019.
 > - Bike trip counts during the am peak were lower than bike trip counts at other times of the day and lower than anticipated.
 > - Bike trip counts exhibit a strong seasonal pattern--less so for am peak commuter trip counts and more so for counts from other times of day.
-> - Bike trip counts exhibit a pattern by day of week. Trip counts peak on Tuesday and Wednesday and are lowest on Friday.
-> - Counts of bike trips at the Fremont bike trip counter location was 3-4 times higher than the next highest location. Some statistical analysis was performed without Fremont counts to prevent it from overshadowing the results.
+> - AM peak (weekday only) bike trip counts exhibit a pattern by day of week. Trip counts peak on Tuesday and Wednesday and are lowest on Friday.
+> - Counts of bike trips at the Fremont bike trip counter location were 3-4 times higher than the next highest location. Some statistical analysis was performed without Fremont counts to prevent it from overshadowing the results.
 
-- Visualizations and statistical analysis
+## Visualizations and statistical analysis
 -- ave daily counts by AM Peak vs. Other
 -- ave daily counts by day of week and peak vs non
 -
