@@ -132,11 +132,11 @@ When linking section titles with spaces in between, you must use a '-' (dash) to
 
 <!-- SECTION 1 -->
 ## Data Cleaning
-- Datasets of hourly bike trip counts were obtained from the 10 active Seattle bike trip counter locations. While these datasets were reasonably complete and well-structured, there were several challenges to compiling them into one master datatable for useful analysis.
-- The preparation of raw dataset into a usable datatable required numerous steps. The first step was to read raw files from the city of Seattle's data portals in batches and append sets from the same site into one complete set. 
+- Datasets of hourly bike trip counts were obtained from the active Seattle bike trip counter locations. While these datasets were reasonably complete and well-structured, there were several challenges to compiling them into one master datatable for useful analysis.
+- The preparation of a raw dataset into a usable datatable required numerous steps. The first step was to read raw files from the city of Seattle's data portals in batches and append sets from the same site into one complete set. 
 - Once a location's set was complete and contained hourly bike trip counts from 1/1/2014-6/30/2020, the next steps were to create day of week, month, and year columns from the date field and then aggregate each dataset into a daily count of trips during am peak (5-9 am: assumed to be commuter trips) and other trips (an estimate of non-commuter trips: total trips - (commuter trip counts x 2)). The reason for subtracting 2x am peak counts from the total count was to allow 'other trip counts' to be a proxy for recreational trip counts. 
-- A column with the count of bike shops within approx 2 miles of the bike trip counter location was added for each of the 9 bike trip counter locations.
-- Each of the 9 bike trip counter location files were then merged by date into one master. Daily weather for Seattle (sourced by NOAA) info was added.
+- A column with the count of bike shops within approx 2 miles of the bike trip counter location was added for each of the bike trip counter locations.
+- Each of the bike trip counter location files were then merged by date into one master. Daily weather for Seattle (sourced by NOAA) info was added.
 - Additional columns were then created on this master datatable:
 >
 > - Total am peak trips and other trips
@@ -195,6 +195,7 @@ When linking section titles with spaces in between, you must use a '-' (dash) to
     During the EDA it was discovered that locations with fewer bike shops nearby coincided with lower ride counts than locations with more bike shops. Since the variation within these groups was high, statistical analysis was done to compare the location from the 'fewer' bike shops group with the highest average ride count to the 'more' bike shops group. This location was Myrtle Edwards. It has two bike shops nearby. Counts average 850 rides per day. This compares to an average of 950 for ride counts from the 'more' bike shops group.
   </p>
   <p align='left'> 
+-   T-test parameters: 
 -    The null hypothesis: Myrtle Edwards ride counts are less than those in the 'more' group. 
 -    Alternative hypothesis: Myrtle Edwards ride counts are as good as or better than those in the 'more' group. 
 -    A t-test was chosen to compare the means. The alpha level was set at 0.05, but needed to be adjusted since the data was viewed prior to the site selection. Since the 'fewer' group had 5 members in it and all 5 of them could have been selected, the alpha needed to be divided by 5 to reduce the observor error from hand-selecting the site most likely to exceed the alpha level.
