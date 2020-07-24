@@ -1,7 +1,8 @@
 import pandas as pd
 import numpy as np
-    
-# class TripDataPrep(self, ):
+
+import json
+from scipy import stats
 
 def r_w_bike_trips(path, location_name, num_shops, app_token, limit=50000, offset=50000):
     '''
@@ -25,7 +26,6 @@ def r_w_bike_trips(path, location_name, num_shops, app_token, limit=50000, offse
     df = df_a.append(df_b)    
     # rename trip_count column to location_name
     df[location_name] = df.iloc[:, -2:].sum(axis=1)
-    df[location_name].fillna(0, inplace=True) 
     
     # calculate date, month, year, dow, commuter (boolean), trip count am peak, trip count other times
     df['short_date'] = pd.DatetimeIndex(df['date']).date
@@ -38,20 +38,23 @@ def r_w_bike_trips(path, location_name, num_shops, app_token, limit=50000, offse
     df[f'{location_name}_other'] = np.where(df['am_commuter']==False, df[location_name], 0)
     
     # collapse table by date and create sum counts for commuter and (other-(2 x commuter))
-    df_by_date = df.groupby(['short_date', 'month', 'year', 'dow']).agg(
+    df = df.groupby(['short_date', 'month', 'year', 'dow']).agg(
                                         {f'{location_name}_am_peak':'sum',
                                          f'{location_name}_other':'sum'
                                           }).reset_index()
     
+    # remove years prior to 2015 and above 2019
+    df = df[(df['year'] >= 2015) &  (df['year'] <= 2019)]
+    
     # commuters travel 2 ways--remove assumed pm commuter trips from trip count other
     df[f'{location_name}_other'] = df[f'{location_name}_other'] - df[f'{location_name}_am_peak']
-    
+
     # add in count of nearby bike shops
-    df_by_date[f'{location_name}_bike_shops'] = num_shops
-    df_by_date.to_json(f'data/{location_name}.json', date_format='iso')
+    df[f'{location_name}_bike_shops'] = num_shops
+    df.to_json(f'data/{location_name}.json', date_format='iso')
     
     #test output to be sure the read operation went ok
-    print(df_by_date.head())
+    print(df.head())
 
 
 def merge_counter_locations(location_dict):
@@ -69,7 +72,7 @@ def merge_counter_locations(location_dict):
     df (dataframe): master bike trip count file
     '''
     count = 1
-    for k,v in urls.items():
+    for k,v in location_dict.items():
         if count == 1:
             df = pd.read_json(f'data/{k}.json')
         else:
@@ -94,7 +97,7 @@ def add_weather(df, weather_file, keep_cols):
     -------
     Updated dataframe
     '''
-    df_seattle_weather = pd.read_csv(weather_csv, usecols=keep_cols)
+    df_seattle_weather = pd.read_csv(weather_file, usecols=keep_cols)
     df_seattle_weather['date'] = pd.DatetimeIndex(df_seattle_weather["DATE"]).date
     df = df.merge(df_seattle_weather, how="left", left_on="date", right_on='date')
     df.index = df['date']
@@ -115,7 +118,7 @@ def add_daily_summary_data(df, bike_shops_d):
     '''
     few_am_peak, many_am_peak, few_other, many_other = [], [], [], []
 
-    for k,v in bike_shops.items():
+    for k,v in bike_shops_d.items():
         if v <= 3:
             few_am_peak.append('{}_am_peak'.format(k))
             few_other.append(f'{k}_other')
