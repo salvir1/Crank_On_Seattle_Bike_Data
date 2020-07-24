@@ -1,12 +1,16 @@
 # Seattle_spins_analysis
+## Study of bike trips in Seattle 2015 - 2019
 
 ADD Hyperlinked TOC
 
-## Study of bike trips in Seattle 2015 - 2019
+## Basic Overview
+In 2014, the city of Seattle expanded its bike trip counter program to gain a better understanding of bike trip patterns. Sub-surface and reflective counters were placed in 12 different locations along greenways and bike commuter corridors. (Three are no longer in service and one new one was added in 2019.) The stated goal was to get a measure of baseline ridership that could guide investments in infrastructure to help the city reach its goal of increasing bike ridership by 400% by 2030. This project involved analyzing this data and performing statistical tests to answer questions that arise from the dataset.
+
+### Project Goal
 What kind of patterns are recognizable in the bike rider count data that Seattle collects hourly at 9 different locations throughout the city? Which of these patterns reach statistical significance?
 
-### Background
-In 2014, the city of Seattle expanded its bike trip counter program to gain a better understanding of bike trip patterns. Sub-surface and reflective counters were placed in 12 different locations along greenways and bike commuter corridors. Three are no longer in service and one new one was added in 2019. The stated goal was to get a measure of baseline ridership that could guide investments in infrastructure to help the city reach its goal of increasing bike ridership by 400% by 2030. Since 2014, dedicated bike only bike lanes have been added in the city--most notably along 2nd Ave through the central district of the city. Some planned projects have been eliminated due to lack of community and government support. 
+### Other Relevant Background Information
+Since 2014, dedicated bike only bike lanes have been added in the city--most notably along 2nd Ave through the central district of the city. Some planned projects have been eliminated due to lack of community and government support. 
 
 Seattle ranks somewhere in the middle of the top of the pack regarding bike friendliness and bike commuter ridership. According to the [2014 American Community Survey](http://bikeleague.org/sites/default/files/Where_We_Ride_2014_data_web.pdf#12) analysis of bike commuting in cities, 3.7% of people bike to work in Seattle which placed it 24th among cities with populations over 65,000.
 
@@ -37,12 +41,17 @@ The bike count--while daily--is by no means a comprehensive count of bike trips.
 ## Visualizations and statistical analysis
 -- ave daily counts by AM Peak vs. Other
 -- ave daily counts by day of week and peak vs non
--- Several statistical tests were performed on the data. The more intriguing tests are presented below.
+-- Several statistical tests were performed on the data. Three of the more intriguing tests are presented below.
+
+--Ride counts appeared to increase in 2019. Coincided with the expansion of the Second Ave separated grade bikeway. If we were working for the city of Seattle in 2018 and were planning to publicize the success of the new bikeway, when should we have our Public Relations team prepare the media event? We'd want to be sure to set a reasonable alpha to reject the null hypothesis that the ride counts were not increasing. Set an alpha = 5%. But we'd also want to predict the earliest opportunity to accept the alternative hypothesis given the alternative hypothesis is true. If focused on am peak trips only, consider every day to be a sample. If we expect to see a 10% increase in ride counts, when will we have a 90% chance of accepting the alternative hypothesis?
+
+-- Are ride counts higher in locations with more bike shops? That was the original question. EDA revealed ride counts to be more than twice as high at locations with more bike shops, so statistical test was changed. Instead, compared ave daily counts of the few bike shop location with the highest average ride counts to the many bike shop location with the lowest average ride counts. Might be helpful information for someone who is wondering where to locate a bike shop--good ride counts and few bike shops. EXPLAIN TEST THAT WAS PERFORMED. 
+
+<img align="right" src="ME.png" width='275' height='auto' ></img>
 -- Overall, ride count averages are comparable during the am peak from one weekday to the next. Friday has the lowest average rides and that average is consistent from year to year. Is it a statistically measurable difference between ride counts on Fridays verus ride counts on Tuesdays--the day with the highest average am peak counts? This question was explored two ways. One was with a t-test approach. EXPLAIN NULL HYPOTHESIS. ALT. ALPHA.
 
 The p-value was essentially zero. Another was with a bootstrap approach, with 200 bootstrap samples being generated for Tuesday and 200 for Friday. 95% confidence intervals were derived from these bootstrap samples and then plotted. There was no overlap of the CIs.
 
--- Are ride counts higher in locations with more bike shops? That was the original question. EDA revealed ride counts to be more than twice as high at locations with more bike shops, so statistical test was changed. Instead, compared ave daily counts of the few bike shop location with the highest average ride counts to the many bike shop location with the lowest average ride counts. Might be helpful information for someone who is wondering where to locate a bike shop--good ride counts and few bike shops. EXPLAIN TEST THAT WAS PERFORMED. 
 
 -- Power analysis. 
 -
