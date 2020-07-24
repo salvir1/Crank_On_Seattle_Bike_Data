@@ -14,10 +14,12 @@ Tips/Notices/Etc:
 
 <!-- HEADER SECTION -->
 
+# CRANK ON SEATTLE BIKE DATA
+
 <div class='header'> 
 <!-- Your header image here -->
 <div class='headingImage' id='mainHeaderImage' align="center">
-    <img src="https://www.dataquest.io/wp-content/uploads/2019/01/data-science-portfolio-github.jpg" width='1200' height='auto' ></img>
+    <img src="img/Tour_de_France_1906_01-e1562837024838-1024x504.jpg" width='1200' height='auto' ></img>
 </div>
 
 <!-- Put your badges here, either for fun or for information -->
