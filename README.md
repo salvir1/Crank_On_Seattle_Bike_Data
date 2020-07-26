@@ -71,7 +71,8 @@ When linking section titles with spaces in between, you must use a '-' (dash) to
 <!-- Overview Section -->
 - [Overview](#overview)
   - [Context](#context)
-  - [Goals](#goal)
+  - [Goals](#goals)
+  - [Technologies Used](#technologies)
 
 <!-- Section 1 -->
 - [Data Cleaning and Prep](#section-1)
@@ -79,15 +80,21 @@ When linking section titles with spaces in between, you must use a '-' (dash) to
 
 <!-- Section 2 -->
 - [EDA](#section-2)
+
+<!-- Section 3 -->
+
 - [Statistical Analysis](#section-3)
-  - [Would you open a new bike shop here?](#section-3a)
-  - [How 'powerful' was the increase in ride counts in 2019?](#section-3b)
-  - [Taking the bike commute off--low Friday numbers](#section-3c)
+  - [Would you open a new bike shop here?](#section3a)
+  - [How 'powerful' was the increase in ride counts in 2019?](#section3b)
+  - [Taking the bike commute off--low Friday numbers](#section3c)
+
+<!-- Future Research -->
+- [Future Research](#future)
+
+
 <!-- Contributors -->
 - [Contributors](#contributors)
 
-<!-- Credits -->
-- [Credits](#credits)
 
 <!-- License -->
 - [License](#license)
@@ -110,28 +117,45 @@ When linking section titles with spaces in between, you must use a '-' (dash) to
   <p align='left'> 
     In 2014, the city of Seattle expanded its bike trip counter program to gain a better understanding of bike trip patterns. Sub-surface and reflective counters were placed in 12 different locations along greenways and bike commuter corridors. (Three are no longer in service and one new one was added in 2019.) The stated goal was to get a measure of baseline ridership that could guide investments in infrastructure to help the city reach its goal of increasing bike ridership by 400% by 2030. 
   </p>
-    <p align='left'> 
-    The Crank on Seattle Bike Data project involved analyzing uploading, cleaning, and formatting this data, conducting exploratory EDA, and performing statistical tests to answer several questions that arose from viewing the dataset. 
+  <p align='left'> 
+    The Crank on Seattle Bike Data project involved analyzing uploading, cleaning, and formatting this data. Other relevant data such as the prevalence of bike shops by counter locations was added to augment the ride count dataset. Exploratory EDA was performed on this dataset to confirm data validity and to understand trends and patterns. A number of statistical tests were performed to answer several questions that arose from viewing the dataset. 
   </p>
-  </p>    
+  <p align='left'> 
     Since 2014, dedicated bike only bike lanes have been added in the city--most notably along 2nd Ave through the central district of the city. Some planned projects have been eliminated due to lack of community and government support. Seattle ranks somewhere in the middle of the top of the pack regarding bike friendliness and bike commuter ridership. According to the [2014 American Community Survey](http://bikeleague.org/sites/default/files/Where_We_Ride_2014_data_web.pdf#12) analysis of bike commuting in cities, 3.7% of people bike to work in Seattle which placed it 24th among cities with populations over 65,000.
   </p>
-  </p>    
-    
-  </p>    
+</div>
 
 ### Goals
 
-<!-- Example of having image and text side by side -->
-<div class=contentDiv id='goalDiv'>
+<div class=contentDiv id='goalsDiv'>
   <p align='left'> 
-    This project had several goals: What kind of patterns are recognizable in the bike rider count data that Seattle collects hourly at 9 different locations throughout the city? What can be said about the increase in ride counts from the fairly stable counts of 2018 to the increase in 2019? Is there any one ride count location that stands out as having fewer bike shops nearby (2 or 3 total) but as many ride counts as a location that has many more bike shops (5-7)? Is there any one day of the week with significantly fewer ride counts than others?
+    The original intent of this study was to answer the question if ride counts correlated with the number of bike shops nearby. In other words, do counter locations with more bike shops nearby have higher ride counts, and vice versa? The answer to this question became obvious once the data investigation process got underway (spoiler alert--it's an emphatic yes). Rather than stop there, further research was performed to explore other meaningful questions relevant to biking in Seattle. 
   </p>
+  </p>    
+    One additional goal of the project was to dig deeper into the analysis of bike shops and ride counts. The aim of this additional analysis was to ascertain if one of the counter locations with few (just 2-3) bike shops nearby might have ride counts that approached those of locations with many more bike shops (5-8 bike shops nearby.
+
+    Another goal was to explore the strength of the 2019 ride count increase as a function of time. A power curve predictive model  was created as a hypothetical example of how city officials might have been able to plan the timing of publicity regarding the completion of the Second Avenue bikeway project.
+  </p>
+</div>
+
+### Technologies Used
+
+<div class=contentDiv id='technologiesDiv'>
+  <ul>
+      <li>Python</li>
+      <li>Pandas</li>
+      <li>Numpy</li>
+      <li>Scipy</li>
+      <li>Matplotlib</li>
+      <li>Jupyter Notebook</li>
+  </ul> 
 </div>
 
 
 <!-- SECTION 1 -->
-## Data Cleaning
+
+## Data Cleaning and Prep
+
 - Datasets of hourly bike trip counts were obtained from the active Seattle bike trip counter locations. While these datasets were reasonably complete and well-structured, there were several challenges to compiling them into one master datatable for useful analysis.
 - The preparation of a raw dataset into a usable datatable required numerous steps. The first step was to read raw files from the city of Seattle's data portals in batches and append sets from the same site into one complete set. 
 - Once a location's set was complete and contained hourly bike trip counts from 1/1/2014-6/30/2020, the next steps were to create day of week, month, and year columns from the date field and then aggregate each dataset into a daily count of trips during am peak (5-9 am: assumed to be commuter trips) and other trips (an estimate of non-commuter trips: total trips - (commuter trip counts x 2)). The reason for subtracting 2x am peak counts from the total count was to allow 'other trip counts' to be a proxy for recreational trip counts. 
@@ -144,10 +168,12 @@ When linking section titles with spaces in between, you must use a '-' (dash) to
 
 
 <!-- SECTION 2 -->
+
 ## EDA
+
 - This data has its limitations. The bike count--while daily--is by no means a comprehensive count of bike trips. Nor do these counts tell us anything about why people choose to ride or why others choose not to. Also, riders on a single trip could be counted at more than one location if their trip happened to pass by multiple counter locations. The likelihood of this happening increases with longer trips since more counters could be encountered, and with certain commuter trips since counters are located at the heads and tails of common commutes such as Fremont and downtown.
 - During EDA, it was discovered that one of these sites did not come online until 2019. This site was not included in any of the analysis. Nine sites were included in the analysis.
-- During EDA, it was discovered that data from several of the counter locations during 2014 was unreliable. Counts were 2-3x expectations. All data from this year was dropped.
+- During EDA, it was discovered that data from several of the counter locations during 2014 was unreliable. Counts were 2-3x expectations and appeared to measurement error. All data from this year was dropped.
 - 2020 has been such an anomaly that it too was dropped from analysis. It may be interesting to perform analysis on data from this year at a future date.
 - During EDA, it was discovered that data from the NE Seattle counter location was missing for 3 months in the summer. Counts were much higher than expected in the month prior suggesting that this month's totals may have actually included some of the missing data, but clearly not all of it. Entries for these four months were converted to NaN values so as to maintain the integrity of statistics and data visualization.
 - Numerous preliminary visualizations were performed to better understand some of the patterns in the data. At a top level, daily ride counts were separated out between am peak commuter times and other times. These two groups were mostly analyzed separately since they demonstrated different patterns of weekly cyclicity, monthly seasonality 
@@ -183,60 +209,103 @@ When linking section titles with spaces in between, you must use a '-' (dash) to
 
 
 <!-- SECTION 3 -->
+
 ## Statistical Analysis
 
   <!-- SECTION 3A -->
-### Would you open a new bike shop here?
+
+### Question 1: Would you open a new bike shop here?
+
   <div class=contentDiv id='section3adiv'>
   <p align='left'> 
     One reasonable question from this dataset would be to ask if any of the locations might have favorable attributes to siting a new bike shop. In particular, it might be interesting if a location had few bike shops but ride counts that were comparable to locations with more bike shops.
    </p>
  </p>  
-    During the EDA it was discovered that locations with fewer bike shops nearby coincided with lower ride counts than locations with more bike shops. Since the variation within these groups was high, statistical analysis was done to compare the location from the 'fewer' bike shops group with the highest average ride count to the 'more' bike shops group. This location was Myrtle Edwards. It has two bike shops nearby. Counts average 850 rides per day. This compares to an average of 950 for ride counts from the 'more' bike shops group.
+    During the EDA it was discovered that locations with fewer bike shops nearby (only 2 or3) had less than half the average ride counts than locations with more bike shops (5-8). Given the large numbers of observations in the samples, means testing was pointless. Instead, a different question was considered. Was there one location out of the five with few bikeshops nearby that nonetheless had ride counts that were comparable to locations with more bike shops nearby. This type of information might be useful to someone evaluating locations for a future bike shop. The best candidate location from the 'fewer bike shops nearby' group is Myrtle Edwards. It has just two bike shops nearby. Counts at Myrtle Edwards average 850 rides per day. This compares to 950 ride counts on average for locations that have 5-8 bike shops nearby.
   </p>
   <p align='left'> 
--   T-test parameters: 
--    The null hypothesis: Myrtle Edwards ride counts are less than those in the 'more' group. 
--    Alternative hypothesis: Myrtle Edwards ride counts are as good as or better than those in the 'more' group. 
--    A t-test was chosen to compare the means. The alpha level was set at 0.05, but needed to be adjusted since the data was viewed prior to the site selection. Since the 'fewer' group had 5 members in it and all 5 of them could have been selected, the alpha needed to be divided by 5 to reduce the observor error from hand-selecting the site most likely to exceed the alpha level.
-    - Result: Unfortunately, the p-value was very low meaning that the null hypothesis could not be rejected. While Myrtle Edwards does have high ride counts compared to its peers, the alternative hypothesis could not be accepted.
+    A t-test was constructed to compare the mean ride counts from the Myrtle Edwards location (850 rides per day) to the mean ride counts for locations with 5-8 bike shops nearby (950 ride counts per day).
   </p>
+  <ul>
+      <li>T-test parameters:</li>
+      <li>Null hypothesis: Myrtle Edwards ride counts are less than those in the 'more' group</li>
+      <li>Alternative hypothesis: Myrtle Edwards ride counts are as good as or better than those in the 'more' group</li>
+      <li>Alpha = 0.01. The alpha level was first chosen to be 0.05, but needed to be adjusted since the data was viewed prior to the site selection. Since the 'fewer' group had 5 members in it and all 5 of them could have been selected, alpha was divided by 5 to reduce the observor error from hand-selecting the site most likely to exceed the alpha level.</li>
+      <li>Result: p = 0.000001. The means are not equivalent.</li>
+  </ul> 
    <img align="center" src="img/ME.png" width='700' height='auto' ></img>
+
+### Myrtle Edwards ride counts conclusion
+
+<p align='left'> 
+    Unfortunately, the p-value was very low meaning that the null hypothesis could not be rejected. While Myrtle Edwards does have high ride counts compared to its peers, the alternative hypothesis could not be accepted.
+</p>
 
   </div>
 
+
+
   <!-- SECTION 3B -->
-### How 'powerful' was the increase in ride counts in 2019?
-  <div class=contentDiv id='section3adiv'>
+
+### Question 2: How 'powerful' was the increase in ride counts in 2019?
+
+  <div class=contentDiv id='section3bdiv'>
   <p align='left'> 
     The city of Seattle wrapped up its most expensive bike transit improvement in history in 2018 with the completion of a separated bikeway through downtown on Second Avenue. This raised a hypothetical question. If we were working for the city of Seattle in 2018 and were planning to publicize the success of the new bikeway, when should we have our Public Relations team prepare the media event? 
   </p>
   <p align='left'> 
-    On the one hand, we'd want to avoid the embarassment of claiming success when there wasn't really a success, so we'd want a reasonably strict alpha level. But we'd also want to predict the earliest opportunity to accept the alternative hypothesis given the alternative hypothesis is true and not delay promoting our success. A power curve analysis would provide some answers.
+    On the one hand, we'd want to avoid the embarassment of claiming success when there wasn't really a success, so we'd want a reasonably strict alpha level. But we'd also want to predict the earliest opportunity to accept the alternative hypothesis given the alternative hypothesis is true and not delay promoting our success. A power curve prediction model would provide some answers. 
   </p>
   <p align='left'> 
-    Consider every day to be a sample. If we just look at AM peak trips, we get about 60 samples every quarter. If we choose an alpha level of 0.05, what do the power curves look like as sample sizes and effect rate change? If we assume that we will see a 10% increase in ride counts, when will we have a 90% chance of accepting the alternative hypothesis?
+    A power curve prediction model is a regular tool when planning statistical tests in which each sample is expensive--such as when planning a test of a new pharmaceutical on patients for the first time. This test is used to select the right sample size given the expected effectivity of the new treatment. 
+  </p>
+  <p align='left'> 
+    In this situation, every day is a new measurement--a new sample. The cost of each sample is one day. If we just look at AM peak trips, we get about 60 samples every quarter. If we choose an alpha level of 0.05, what do the power curves look like as sample sizes and effect rate change? If we assume that we will see a 10% increase in ride counts, when will we have a 90% chance of accepting the alternative hypothesis?
   </p>
 
    <img align="center" src="img/power_curves.png" width='700' height='auto' ></img>
 
   </div>
 
+### Power curve prediction model conclusion
+
+<p align='left'> 
+    The power curve prediction model illustrates how much power our model will have--in other words, accepting the alternative hypothesis when the alternative hypothesis is valid--given the effectivity, i.e. the amount of change, and the number of days. If ride counts are expected to increase 10%, we can expect to have a power of about 90% after 120 days, which in this case is half a year since we're looking at just AM peak ride counts.
+</p>
+
 
   <!-- SECTION 3C -->
+
 ### Taking the bike commute off--low Friday numbers
-  <div class=contentDiv id='section3adiv'>
+
+  <div class=contentDiv id='section3cdiv'>
   <p align='left'> 
     Is there really something down about Fridays? It looks like it has the lowest average counts in both the 'am peak' bike count group and 'other' group. Is this apparent difference statistically meaningful? This question was looked at two ways. The first approach was with a t-test approach comparing Tuesday average counts during the am peak to Friday average counts during the am peak. The next approach relied on a bootstrap analysis technique of repeatedly resampling the samples to estimate the distribution of the sample means. Bootstrap samples were derived for the Tuesday and Friday groups and 95% confidence intervals were generated for each. 
   </p>
   <p align='left'> 
-    The alpha level was set to 0.05 for the t-test. The null hypothesis was that the means were the same. The alternative hypothesis was that the Tuesday group had a higher mean. The p-value approached zero--we could accept the alternative hypothesis. The bootstrap confidence intervals did not come close to overlapping.
+    The alpha level was set to 0.05 for the t-test. The null hypothesis was that the means were the same. The alternative hypothesis was that the Tuesday group had a higher mean. 
   </p>
    <img align="center" src="img/Tue_vs_Fri.png" width='700' height='auto' ></img>
 
   </div>
 
+### Conclusion: Tuesdays vs. Fridays
+  <p align='left'> 
+    The main purpose of this statistical analysis was to compare the methods and results from two different statistical tests. The results themselves were not surprising. For the t-test, the p-value approached zero--we could accept the alternative hypothesis. The bootstrap confidence intervals did not come close to overlapping.
+  </p>
 
+<!-- Future Research -->
+
+## Future Research
+  <p align='left'> 
+    Further research on this data could head in many directions. The topics that were already explored could be explored more deeply and meaningfully. One future area of research could make the bike shop proximity measure more precise. Other businesses besides bike shops do well around bike travel corridors. A number of brew gardens have opened up in the Fremont neighborhood yards away from the popular Burke Gilman trail. Could future analysis reveal other candidate locations for brew gardens that wish to serve the bike community?
+  </p>
+  <p align='left'> 
+    Data was obtained from 2020 and the city makes additional data available soon after it is collected. An analysis of this data could reveal how ridership was impacted, and how and if it might return.
+  </p>
+  <p align='left'> 
+    Finally, weather attributes were loaded into the database, but essentially untouched. Another area of research could measure the impact of weather on ridership.
+  </p>
 
 
 
