@@ -133,7 +133,8 @@ When linking section titles with spaces in between, you must use a '-' (dash) to
   </p>
   </p>    
     One additional goal of the project was to dig deeper into the analysis of bike shops and ride counts. The aim of this additional analysis was to ascertain if one of the counter locations with few (just 2-3) bike shops nearby might have ride counts that approached those of locations with many more bike shops (5-8 bike shops nearby.
-
+  </p>
+  </p>
     Another goal was to explore the strength of the 2019 ride count increase as a function of time. A power curve predictive model  was created as a hypothetical example of how city officials might have been able to plan the timing of publicity regarding the completion of the Second Avenue bikeway project.
   </p>
 </div>
